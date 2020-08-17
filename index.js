@@ -43,5 +43,24 @@ app.post('/api/v1/add', (req, res) => {
     res.json(todoItem);
 });
 
+// http://localhost:3000/api/v1/item/:id にDELETEで送信してきたときに
+// 項目を削除する。:idの部分にはIDが入る
+// 例えば
+// http://localhost:3000/api/v1/item/cc7cf63c-ccaf-4401-a611-f19daec0f74e
+// にDELETEメソッドでアクセスすると、idがcc7cf63c-ccaf-4401-a611-f19daec0f74eのものが削除される
+app.delete('/api/v1/item/:id', (req, res) => {
+    // URLの:idと同じIDを持つ項目を検索
+    const index = todoList.findIndex((item) => item.id === req.params.id);
+
+    // 項目が見つかった場合
+    if(index >= 0) {
+        const deleted = todoList.splice(index, 1); // indexの位置にある項目を削除
+        console.log('Delete: ' + JSON.stringify(deleted[0]));
+    }
+
+    // ステータスコード200:OKを送信
+    res.sendStatus(200);
+});
+
 // ポート3000でサーバを立てる
 app.listen(3000, () => console.log('Listening on port 3000'));
