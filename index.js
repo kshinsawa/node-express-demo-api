@@ -4,6 +4,9 @@ const express = require('express');
 // expressアプリを生成する
 const app = express();
 
+// webフォルダの中身を公開する
+app.use(express.static('web'));
+
 // ルート（http://localhost/）にアクセスしてきたときに「Hello」を返す
 app.get('/', (req, res) => res.send('Hello'));
 
