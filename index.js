@@ -1,27 +1,46 @@
-// expressモジュールを読み込む
-const express = require('express');
+const express = require('express'); // expressモジュールを読み込む
+const multer = require('multer'); // multerモジュールを読み込む
+// const uuid = require('uuid'); // uuidモジュールを読み込む
 
-// expressアプリを生成する
-const app = express();
+const app = express(); // expressアプリを生成する
+app.use(multer().none()); // multerでブラウザから送信されたデータを解釈する
+app.use(express.static('web')); // webフォルダの中身を公開する
 
-// webフォルダの中身を公開する
-app.use(express.static('web'));
-
-// ルート（http://localhost/）にアクセスしてきたときに「Hello」を返す
-app.get('/', (req, res) => res.send('Hello'));
+// TODOリストデータ
+const todoList = [];
 
 // http://localhost:3000/api/v1/list にアクセスしてきたときに
 // TODOリストを返す
 app.get('/api/v1/list', (req, res) => {
-  // クライアントに送るJSONデータ
-  const todoList = [
-      { title: 'JavaScriptを勉強する', done: true },
-      { title: 'Node.jsを勉強する', done: false },
-      { title: 'Web APIを作る', done: false }
-  ];
+    // JSONを送信する
+    res.json(todoList);
+});
 
-  // JSONを送信する
-  res.json(todoList);
+// http://localhost:3000/api/v1/add にデータを送信してきたときに
+// TODOリストに項目を追加する
+app.post('/api/v1/add', (req, res) => {
+    // クライアントからの送信データを取得する
+    const todoData = req.body;
+    const todoTitle = todoData.title;
+    
+    // ユニークIDを生成する
+    // const id = uuid();
+
+    // TODO項目を作る
+    const todoItem = {
+        // id,
+        title: todoTitle,
+        done: false
+    };
+
+    // TODOリストに項目を追加する
+    todoList.push(todoItem);
+
+    // コンソールに出力する
+    console.log('Add: ' + JSON.stringify(todoItem));
+
+    // 追加した項目をクライアントに返す
+    res.json(todoItem);
 });
 
 // ポート3000でサーバを立てる
