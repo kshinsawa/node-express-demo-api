@@ -1,6 +1,6 @@
 const express = require('express'); // expressモジュールを読み込む
 const multer = require('multer'); // multerモジュールを読み込む
-// const uuid = require('uuid'); // uuidモジュールを読み込む
+const { v4: uuidv4 } = require('uuid'); // uuidモジュールを読み込む
 
 const app = express(); // expressアプリを生成する
 app.use(multer().none()); // multerでブラウザから送信されたデータを解釈する
@@ -24,11 +24,11 @@ app.post('/api/v1/add', (req, res) => {
     const todoTitle = todoData.title;
     
     // ユニークIDを生成する
-    // const id = uuid();
+    const id = uuidv4();
 
     // TODO項目を作る
     const todoItem = {
-        // id,
+        id,
         title: todoTitle,
         done: false
     };
